@@ -8,6 +8,23 @@
       "Resource": ["*"]
     },
     {
+      "Sid": "IAMPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "iam:AttachRolePolicy",
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:DeleteRolePolicy",
+        "iam:DetachRolePolicy",
+        "iam:GetRole",
+        "iam:GetRolePolicy",
+        "iam:PutRolePolicy",
+        "iam:TagRole",
+        "iam:PassRole"
+      ],
+      "Resource": ["arn:aws:iam::748157940656:role/gh-actions"]
+    },
+    {
       "Sid": "S3Permissions",
       "Effect": "Allow",
       "Action": [
@@ -54,10 +71,7 @@
       "Action": ["cloudwatch:*", "logs:*"],
       "Resource": [
         "arn:aws:cloudwatch:us-west-2:748157940656:alarm:*",
-        "arn:aws:logs:us-west-2:748157940656:log-group:*",
-        "arn:aws:cloudwatch:us-west-2:748157940656:alarm:ArchiveQueueAlarm",
-        "arn:aws:cloudwatch:us-west-2:748157940656:alarm:PendingQueueDLQAlarm",
-        "arn:aws:cloudwatch:us-west-2:748157940656:alarm:ProcessingQueueAlarm"
+        "arn:aws:logs:us-west-2:748157940656:log-group:*"
       ]
     },
     {
@@ -118,10 +132,7 @@
         "lambda:DeleteEventSourceMapping",
         "lambda:GetEventSourceMapping"
       ],
-      "Resource": [
-        "arn:aws:lambda:us-west-2:748157940656:event-source-mapping:*",
-        "*"
-      ]
+      "Resource": ["arn:aws:lambda:us-west-2:748157940656:*"]
     },
     {
       "Sid": "ApiGatewayPermissions",
@@ -139,6 +150,16 @@
         "arn:aws:apigateway:us-west-2::/domainnames",
         "arn:aws:apigateway:us-west-2::/domainnames/*"
       ]
+    },
+    {
+      "Sid": "ACMPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "acm:RequestCertificate",
+        "acm:DescribeCertificate",
+        "acm:DeleteCertificate"
+      ],
+      "Resource": ["arn:aws:acm:us-west-2:748157940656:certificate/*"]
     }
   ]
 }

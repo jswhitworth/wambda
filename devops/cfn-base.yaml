@@ -2,13 +2,37 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: "Demo Platform by Jeff Whitworth"
 
 Resources:
+  # Create the IAM Role for Lambda
+  WambdaLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: wambda
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaBasicExecution
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: '*'
+
   # Create the Lambda function
-  wambdaDemoFunction:
+  WanbdaDemoFunction:
     Type: AWS::Lambda::Function
     Properties: 
-      FunctionName: wambdaDemoFunction
+      FunctionName: WanbdaDemoFunction
       Handler: index.handler
-      Role: arn:aws:iam::748157940656:role/gh-actions
+      Role: !GetAtt WambdaLambdaExecutionRole.Arn
       Code:
         ZipFile: |
           def handler(event, context):
@@ -23,7 +47,7 @@ Resources:
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: wambdaDemoApi
+      Name: WanbdaDemoApi
       EndpointConfiguration:
         Types: 
           - REGIONAL
@@ -32,7 +56,7 @@ Resources:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
-      PathPart: wambda
+      PathPart: wanbda
       RestApiId: !Ref ApiGatewayRestApi
 
   ApiGatewayMethod:
@@ -46,7 +70,7 @@ Resources:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
         Uri: 
-          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${wambdaDemoFunction.Arn}/invocations
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${WanbdaDemoFunction.Arn}/invocations
 
   ApiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
@@ -66,20 +90,13 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref wambdaDemoFunction
+      FunctionName: !Ref WanbdaDemoFunction
       Principal: apigateway.amazonaws.com
       SourceArn: 
-        Fn::Sub: arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*/GET/wambda
-
-  # ACM Certificate for API Gateway Default Domain Name
-  ApiGatewayCertificate:
-    Type: AWS::CertificateManager::Certificate
-    Properties:
-      DomainName: !Sub "${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com"
-      ValidationMethod: DNS
+        Fn::Sub: arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*/GET/wanbda
 
 Outputs:
   ApiUrl:
     Description: "API Gateway URL"
     Value: 
-      Fn::Sub: https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/wambda
+      Fn::Sub: https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/wanbda
