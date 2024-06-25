@@ -1,0 +1,99 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "Demo Platform by Jeff Whitworth"
+
+Resources:
+  # Create the Lambda function
+  HelloWorldFunction:
+    Type: AWS::Lambda::Function
+    Properties: 
+      FunctionName: HelloWorldFunction
+      Handler: index.handler
+      Role: arn:aws:iam::748157940656:role/gh-actions
+      Code:
+        ZipFile: |
+          def handler(event, context):
+              return {
+                  'statusCode': 200,
+                  'body': 'Hello, World!'
+              }
+      Runtime: python3.8
+      Timeout: 15
+
+  # API Gateway
+  ApiGatewayRestApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: HelloWorldApi
+      EndpointConfiguration:
+        Types: 
+          - REGIONAL
+
+  ApiGatewayResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+      PathPart: hello
+      RestApiId: !Ref ApiGatewayRestApi
+
+  ApiGatewayMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: GET
+      ResourceId: !Ref ApiGatewayResource
+      RestApiId: !Ref ApiGatewayRestApi
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri: 
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${HelloWorldFunction.Arn}/invocations
+
+  ApiGatewayDeployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      StageName: prod
+
+  ApiGatewayStage:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      StageName: prod
+      DeploymentId: !Ref ApiGatewayDeployment
+
+  # Lambda Permission to API Gateway
+  LambdaApiGatewayPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref HelloWorldFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: 
+        Fn::Sub: arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*/GET/hello
+
+  # Custom Domain Name for API Gateway without SSL
+  ApiGatewayDomainName:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      DomainName: wwvv.texasonlinedrivingsafety.com
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+
+  # API Gateway Base Path Mapping
+  ApiGatewayBasePathMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      DomainName: !Ref ApiGatewayDomainName
+      RestApiId: !Ref ApiGatewayRestApi
+      Stage: prod
+
+Outputs:
+  ApiGatewayDomainName:
+    Description: "API Gateway Domain Name"
+    Value: !GetAtt ApiGatewayDomainName.RegionalDomainName
+
+  ApiUrl:
+    Description: "API Gateway URL"
+    Value: 
+      Fn::Sub: https://${ApiGatewayDomainName}/prod/hello
