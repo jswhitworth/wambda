@@ -24,7 +24,15 @@ jobs:
         with:
           role-to-assume: "arn:aws:iam::748157940656:role/gh-actions"
           aws-region: us-west-2
-      
+
+      - name: Deploy Base Resources
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: wambda-base
+          template: devops/cfn-base.yaml
+          no-fail-on-empty-changeset: "1"
+          capabilities: CAPABILITY_NAMED_IAM
+          
       - name: Deploy Base Resources
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
