@@ -1,4 +1,4 @@
-name: Deploy Fraud Detection Platform
+name: Deploy Wambda
 
 on:
   push:

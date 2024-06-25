@@ -8,23 +8,6 @@
       "Resource": ["*"]
     },
     {
-      "Sid": "IAMPermissions",
-      "Effect": "Allow",
-      "Action": [
-        "iam:AttachRolePolicy",
-        "iam:CreateRole",
-        "iam:DeleteRole",
-        "iam:DeleteRolePolicy",
-        "iam:DetachRolePolicy",
-        "iam:GetRole",
-        "iam:GetRolePolicy",
-        "iam:PutRolePolicy",
-        "iam:TagRole",
-        "iam:PassRole"
-      ],
-      "Resource": ["arn:aws:iam::748157940656:role/cirt*"]
-    },
-    {
       "Sid": "S3Permissions",
       "Effect": "Allow",
       "Action": [
@@ -39,12 +22,9 @@
         "s3:PutEncryptionConfiguration",
         "s3:PutLifecycleConfiguration",
         "s3:PutBucketPublicAccessBlock",
-        "s3:PutObject",
-        "s3:CreateMultipartUpload",
-        "s3:AbortMultipartUpload",
-        "s3:CompleteMultipartUpload"
+        "s3:PutObject"
       ],
-      "Resource": ["arn:aws:s3:::cirt-*", "arn:aws:s3:::cirt-*/*"]
+      "Resource": ["arn:aws:s3:::wambda-*", "arn:aws:s3:::wambda*/*"]
     },
     {
       "Sid": "SSMPermissions",
@@ -54,7 +34,7 @@
         "ssm:GetParameter*",
         "ssm:PutParameter"
       ],
-      "Resource": ["arn:aws:ssm:us-west-2:748157940656:parameter/cirt*"]
+      "Resource": ["arn:aws:ssm:us-west-2:748157940656:parameter/wambda*"]
     },
     {
       "Sid": "ECRPermissions",
@@ -66,7 +46,7 @@
         "ecr:PutLifecyclePolicy",
         "ecr:SetRepositoryPolicy"
       ],
-      "Resource": ["arn:aws:ecr:us-west-2:748157940656:repository/cirt*"]
+      "Resource": ["arn:aws:ecr:us-west-2:748157940656:repository/wambda*"]
     },
     {
       "Sid": "CloudWatchPermissions",
@@ -128,7 +108,7 @@
         "lambda:UpdateFunctionCode",
         "lambda:UpdateFunctionConfiguration"
       ],
-      "Resource": "arn:aws:lambda:us-west-2:748157940656:function:cirt*"
+      "Resource": "arn:aws:lambda:us-west-2:748157940656:function:wambda*"
     },
     {
       "Sid": "LambdaEventSourcePermissions",
