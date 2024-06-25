@@ -27,7 +27,7 @@ Resources:
                 Resource: '*'
 
   # Create the Lambda function
-  WanbdaDemoFunction:
+  wambdaDemoFunction:
     Type: AWS::Lambda::Function
     Properties: 
       FunctionName: wambdaDemoFunction
@@ -47,7 +47,7 @@ Resources:
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: WanbdaDemoApi
+      Name: wambdaDemoApi
       EndpointConfiguration:
         Types: 
           - REGIONAL
@@ -56,7 +56,7 @@ Resources:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
-      PathPart: wanbda
+      PathPart: wambda
       RestApiId: !Ref ApiGatewayRestApi
 
   ApiGatewayMethod:
@@ -70,7 +70,7 @@ Resources:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
         Uri: 
-          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${WanbdaDemoFunction.Arn}/invocations
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${wambdaDemoFunction.Arn}/invocations
 
   ApiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
@@ -84,13 +84,13 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref WanbdaDemoFunction
+      FunctionName: !Ref wambdaDemoFunction
       Principal: apigateway.amazonaws.com
       SourceArn: 
-        Fn::Sub: arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*/GET/wanbda
+        Fn::Sub: arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*/GET/wambda
 
 Outputs:
   ApiUrl:
     Description: "API Gateway URL"
     Value: 
-      Fn::Sub: https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/wanbda
+      Fn::Sub: https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/wambda
