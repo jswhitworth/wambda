@@ -30,7 +30,7 @@ Resources:
   WanbdaDemoFunction:
     Type: AWS::Lambda::Function
     Properties: 
-      FunctionName: WanbdaDemoFunction
+      FunctionName: wambdaDemoFunction
       Handler: index.handler
       Role: !GetAtt WambdaLambdaExecutionRole.Arn
       Code:
