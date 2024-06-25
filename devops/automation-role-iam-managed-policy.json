@@ -1,0 +1,147 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CloudFormationPermissions",
+      "Effect": "Allow",
+      "Action": ["cloudformation:*"],
+      "Resource": ["*"]
+    },
+    {
+      "Sid": "IAMPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "iam:AttachRolePolicy",
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:DeleteRolePolicy",
+        "iam:DetachRolePolicy",
+        "iam:GetRole",
+        "iam:GetRolePolicy",
+        "iam:PutRolePolicy",
+        "iam:TagRole",
+        "iam:PassRole"
+      ],
+      "Resource": ["arn:aws:iam::748157940656:role/cirt*"]
+    },
+    {
+      "Sid": "S3Permissions",
+      "Effect": "Allow",
+      "Action": [
+        "s3:CreateBucket",
+        "s3:ListBucket",
+        "s3:DeleteBucketPolicy",
+        "s3:GetEncryptionConfiguration",
+        "s3:GetBucketPolicy",
+        "s3:GetObject",
+        "s3:PutBucketPolicy",
+        "s3:PutBucketVersioning",
+        "s3:PutEncryptionConfiguration",
+        "s3:PutLifecycleConfiguration",
+        "s3:PutBucketPublicAccessBlock",
+        "s3:PutObject",
+        "s3:CreateMultipartUpload",
+        "s3:AbortMultipartUpload",
+        "s3:CompleteMultipartUpload"
+      ],
+      "Resource": ["arn:aws:s3:::cirt-*", "arn:aws:s3:::cirt-*/*"]
+    },
+    {
+      "Sid": "SSMPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "ssm:DeleteParameter",
+        "ssm:GetParameter*",
+        "ssm:PutParameter"
+      ],
+      "Resource": ["arn:aws:ssm:us-west-2:748157940656:parameter/cirt*"]
+    },
+    {
+      "Sid": "ECRPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:CreateRepository",
+        "ecr:DeleteRepository",
+        "ecr:DescribeRepositories",
+        "ecr:PutLifecyclePolicy",
+        "ecr:SetRepositoryPolicy"
+      ],
+      "Resource": ["arn:aws:ecr:us-west-2:748157940656:repository/cirt*"]
+    },
+    {
+      "Sid": "CloudWatchPermissions",
+      "Effect": "Allow",
+      "Action": ["cloudwatch:*", "logs:*"],
+      "Resource": [
+        "arn:aws:cloudwatch:us-west-2:748157940656:alarm:*",
+        "arn:aws:logs:us-west-2:748157940656:log-group:*",
+        "arn:aws:cloudwatch:us-west-2:748157940656:alarm:ArchiveQueueAlarm",
+        "arn:aws:cloudwatch:us-west-2:748157940656:alarm:PendingQueueDLQAlarm",
+        "arn:aws:cloudwatch:us-west-2:748157940656:alarm:ProcessingQueueAlarm"
+      ]
+    },
+    {
+      "Sid": "EventBridgePermissions",
+      "Effect": "Allow",
+      "Action": [
+        "events:PutRule",
+        "events:DeleteRule",
+        "events:DescribeRule",
+        "events:EnableRule",
+        "events:DisableRule",
+        "events:ListTargetsByRule",
+        "events:PutTargets",
+        "events:RemoveTargets",
+        "events:CreateEventBus",
+        "events:DescribeEventBus",
+        "events:DeleteEventBus"
+      ],
+      "Resource": [
+        "arn:aws:events:us-west-2:748157940656:event-bus/fraud*",
+        "arn:aws:events:us-west-2:748157940656:rule/fraud/*"
+      ]
+    },
+    {
+      "Sid": "SQSPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:CreateQueue",
+        "sqs:DeleteQueue",
+        "sqs:GetQueueAttributes",
+        "sqs:GetQueueUrl",
+        "sqs:ListQueues",
+        "sqs:SendMessage",
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage"
+      ],
+      "Resource": "arn:aws:sqs:us-west-2:748157940656:fraud*"
+    },
+    {
+      "Sid": "LambdaPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:CreateFunction",
+        "lambda:DeleteFunction",
+        "lambda:GetFunction",
+        "lambda:InvokeFunction",
+        "lambda:ListFunctions",
+        "lambda:UpdateFunctionCode",
+        "lambda:UpdateFunctionConfiguration"
+      ],
+      "Resource": "arn:aws:lambda:us-west-2:748157940656:function:cirt*"
+    },
+    {
+      "Sid": "LambdaEventSourcePermissions",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:CreateEventSourceMapping",
+        "lambda:DeleteEventSourceMapping",
+        "lambda:GetEventSourceMapping"
+      ],
+      "Resource": [
+        "arn:aws:lambda:us-west-2:748157940656:event-source-mapping:*",
+        "*"
+      ]
+    }
+  ]
+}
