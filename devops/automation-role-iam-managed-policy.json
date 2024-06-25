@@ -120,7 +120,8 @@
         "lambda:InvokeFunction",
         "lambda:ListFunctions",
         "lambda:UpdateFunctionCode",
-        "lambda:UpdateFunctionConfiguration"
+        "lambda:UpdateFunctionConfiguration",
+        "lambda:AddPermission"
       ],
       "Resource": "arn:aws:lambda:us-west-2:748157940656:function:wambda*"
     },
