@@ -22,7 +22,7 @@
         "iam:TagRole",
         "iam:PassRole"
       ],
-      "Resource": ["arn:aws:iam::748157940656:role/gh-actions"]
+      "Resource": ["arn:aws:iam::748157940656:role/wambda"]
     },
     {
       "Sid": "S3Permissions",
